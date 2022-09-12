@@ -1,15 +1,39 @@
-require("dotenv").config();
+//require("dotenv").config();
 const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
+const saucesRoutes = require("./routes/sauces");
+
 const cors = require("cors");
+
+const userRoutes = require("./routes/user");
+
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+// Connection with mongoDB data base
 
+mongoose
+  .connect(
+    "mongodb+srv://castromorey:Carl0$-MongoDB@cluster0.xjhywfi.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log("Successfully connected to MongoDB Atlas!");
+  })
+  .catch((error) => {
+    console.log("Unable to connect to MongoDB Atlas!");
+    console.error(error);
+  });
+
+app.use(cors());
+app.use(express.json()); //receive the response from server.
+/*
 const data = {
   users: [{ id: 1, email: "user@email.com", password: "123456" }],
   sauces: [],
 };
+
+// code for sign up
 
 app.post("/api/auth/signup", (req, res) => {
   const user = {
@@ -22,6 +46,7 @@ app.post("/api/auth/signup", (req, res) => {
   res.status(201).json(user);
 });
 
+// code for sign in
 app.post("/api/auth/login", (req, res) => {
   const user = data.users.find((u) => u.email === req.body.email);
 
@@ -31,20 +56,16 @@ app.post("/api/auth/login", (req, res) => {
     return res.status(401).json({ error: "Password mismatch" });
 
   res.status(201).json(user);
-});
+});*/
 
-app.get("/api/sauces", (req, res) => {
-  res.json(data.sauces);
-});
+app.use(bodyParser.json());
 
-app.get("/api/sauces/:id", (req, res) => {
-  const sauce = data.sauces.find((s) => s.id === req.params.id);
+//app.use('/api/sauces', saucesRoutes);
 
-  if (!sauce) return res.status(404).json({ error: "Sauce not found" });
-
-  res.json(sauce);
-});
-
-app.post("/api/sauces", (req, res) => {});
+app.use("/api/sauces", saucesRoutes);
+//app.use("/api/sauces/:id", saucesRoutes);
+app.use("/api/auth/", userRoutes);
 
 app.listen(3000, () => console.log("App listening on port 3000"));
+
+module.exports = app;
