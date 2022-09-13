@@ -3,6 +3,8 @@
 
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
+//var passwordSchema = require("../models/password_model");
+//const validator = require("validator");
 
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then((hash) => {
@@ -19,6 +21,7 @@ exports.signup = (req, res, next) => {
       })
       .catch((error) => {
         res.status(500).json({
+          message: "User akready added!",
           error: error,
         });
       });

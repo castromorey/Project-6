@@ -1,4 +1,5 @@
 const Thing = require("../models/thingM");
+const { error } = require("console");
 
 //add a new sauce to the DB
 
