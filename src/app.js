@@ -1,4 +1,4 @@
-//require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -63,8 +63,9 @@ app.use(bodyParser.json());
 //app.use('/api/sauces', saucesRoutes);
 
 app.use("/api/sauces", saucesRoutes);
-//app.use("/api/sauces/:id", saucesRoutes);
+
 app.use("/api/auth/", userRoutes);
+//app.use("/api/auth/signup, userRoutes");
 
 app.listen(3000, () => console.log("App listening on port 3000"));
 
