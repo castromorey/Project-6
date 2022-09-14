@@ -1,5 +1,6 @@
-var passwordValidator = require("password-validator");
-var passwordSchema = new passwordValidator();
+//var passwordValidator = require("password-validator");
+
+//var passwordSchema = new passwordValidator();
 
 // Requirements model
 passwordSchema

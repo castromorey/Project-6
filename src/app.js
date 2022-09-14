@@ -3,6 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+const path = require("path");
+
 const saucesRoutes = require("./routes/sauces");
 
 const cors = require("cors");
@@ -15,7 +17,7 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://castromorey:Carl0$-MongoDB@cluster0.xjhywfi.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://castromorey:xxxxx@cluster0.xjhywfi.mongodb.net/?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Successfully connected to MongoDB Atlas!");
@@ -60,11 +62,12 @@ app.post("/api/auth/login", (req, res) => {
 
 app.use(bodyParser.json());
 
-//app.use('/api/sauces', saucesRoutes);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use("/api/sauces", saucesRoutes);
 
 app.use("/api/auth/", userRoutes);
+
 //app.use("/api/auth/signup, userRoutes");
 
 app.listen(3000, () => console.log("App listening on port 3000"));

@@ -8,8 +8,8 @@ const saucesCtrl = require("../controllers/sauces");
 
 router.get("/", saucesCtrl.getAllSauces);
 router.post("/", saucesCtrl.createThing);
-router.get("/:id", saucesCtrl.getOneThing);
-router.put("/:id", saucesCtrl.ModifyThing);
+//router.get("/:id", saucesCtrl.getOneThing);
+//router.put("/:id", saucesCtrl.ModifyThing);
 //router.delete("/:id", saucesCtrl.DeleteThing);
 
 //exports.createThing = (req, res) => {

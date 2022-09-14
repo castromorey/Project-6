@@ -1,5 +1,6 @@
 const Thing = require("../models/thingM");
 const { error } = require("console");
+//const sauceObject = json.parse("req.body.sauce");
 
 //add a new sauce to the DB
 
@@ -10,12 +11,12 @@ exports.createThing = (req, res) => {
     manufacturer: req.body.manufacturer,
     description: req.body.description,
     mainPepper: req.body.mainPepper,
-    imageUrl: req.body.imageUrl,
+    /*imageUrl: req.body.imageUrl,
     heat: req.body.heat,
     likes: req.body.likes,
     dislikes: req.body.dislikes,
     usersLiked: req.body.usersLiked,
-    usersDisliked: req.body.usersDisliked,
+    usersDisliked: req.body.usersDisliked,*/
   });
 
   thing
@@ -35,7 +36,7 @@ exports.createThing = (req, res) => {
 
 // find one sauce
 
-exports.getOneThing = (req, res) => {
+/*exports.getOneThing = (req, res) => {
   Thing.findOne({
     _id: req.params.id,
   })
@@ -92,14 +93,14 @@ exports.DeleteThing = (req, res) => {
         error: error,
       });
     });
-};
+};*/
 
 // show all sauces
 
 exports.getAllSauces = (req, res) => {
   Thing.find()
-    .then((thingM) => {
-      res.status(200).json(thingM);
+    .then((things) => {
+      res.status(200).json(things);
     })
     .catch((error) => {
       res.status(400).json({

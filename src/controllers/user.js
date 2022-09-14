@@ -3,10 +3,15 @@
 
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
-//var passwordSchema = require("../models/password_model");
+//var passwordSchema = require("../models/passwordMod");
 //const validator = require("validator");
 
 exports.signup = (req, res, next) => {
+  //const valideEMail = validator.isEmail(req.body.email);
+
+  //const validePassword = passwordSchema.validate(req.body.password);
+
+  //if (valideEmail === true && validePassword === true) {
   bcrypt.hash(req.body.password, 10).then((hash) => {
     const user = new User({
       email: req.body.email,
@@ -21,13 +26,14 @@ exports.signup = (req, res, next) => {
       })
       .catch((error) => {
         res.status(500).json({
-          message: "User akready added!",
+          message: "User already added!",
           error: error,
         });
       });
   });
 };
 
+//r**************************************************
 exports.login = (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
