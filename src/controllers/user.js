@@ -2,6 +2,7 @@
 ///SPOST /api/auth/loging
 
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 //var passwordSchema = require("../models/passwordMod");
 //const validator = require("validator");
@@ -34,36 +35,20 @@ exports.signup = (req, res, next) => {
 };
 
 //r**************************************************
-exports.login = (req, res) => {
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({
-          error: new Error("User not found!"),
-        });
-      }
-      bcrypt
-        .compare(req.body.password, user.password)
-        .then((valid) => {
-          if (!valid) {
-            return res.status(401).json({
-              error: new Error("Incorrect password!"),
-            });
-          }
-          res.status(200).json({
-            userId: user._id,
-            token: "token",
-          });
-        })
-        .catch((error) => {
-          res.status(500).json({
-            error: error,
-          });
-        });
-    })
-    .catch((error) => {
-      res.status(500).json({
-        error: error,
-      });
+exports.login = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) throw Error("User not found!");
+
+    const valid = await bcrypt.compare(req.body.password, user.password);
+    if (!valid) throw Error("Incorrect password!");
+
+    const token = jwt.sign({ userId: user._id }, "s3cretttt");
+
+    res.status(200).json({ userId: user._id, token });
+  } catch (ex) {
+    res.status(400).json({
+      message: ex.message,
     });
+  }
 };

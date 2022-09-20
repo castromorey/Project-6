@@ -1,23 +1,28 @@
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
 const mongoose = require("mongoose");
-
-const path = require("path");
 
 const saucesRoutes = require("./routes/sauces");
 
-const cors = require("cors");
-
 const userRoutes = require("./routes/user");
 
+const path = require("path");
+const multer = require("multer");
+
 const app = express();
+
+//-------------------------
+app.use(express.static(path.join(__dirname, "uploads")));
+
+//------------
 
 // Connection with mongoDB data base
 
 mongoose
   .connect(
-    "mongodb+srv://castromorey:xxxxx@cluster0.xjhywfi.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://castromorey:Carl0$-MongoDB@cluster0.xjhywfi.mongodb.net/?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Successfully connected to MongoDB Atlas!");
@@ -29,46 +34,29 @@ mongoose
 
 app.use(cors());
 app.use(express.json()); //receive the response from server.
-/*
-const data = {
-  users: [{ id: 1, email: "user@email.com", password: "123456" }],
-  sauces: [],
+
+//app.use("/uploads/images", express.static(path.join(__dirname, "images")));
+
+const authMiddleware = (req, res, next) => {
+  if (!req.headers.authorization)
+    return res.json({ message: "No token provided" });
+
+  const token = req.headers.authorization.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, "s3cretttt");
+
+    req.user = { userId: decoded.userId };
+
+    next();
+  } catch (ex) {
+    res.status(401).json({ message: "Unauthorized" });
+  }
 };
 
-// code for sign up
-
-app.post("/api/auth/signup", (req, res) => {
-  const user = {
-    id: 1,
-    ...req.body,
-  };
-
-  data.users = [...data.users, user];
-
-  res.status(201).json(user);
-});
-
-// code for sign in
-app.post("/api/auth/login", (req, res) => {
-  const user = data.users.find((u) => u.email === req.body.email);
-
-  if (!user) return res.status(404).json({ error: "User not found" });
-
-  if (user.password !== req.body.password)
-    return res.status(401).json({ error: "Password mismatch" });
-
-  res.status(201).json(user);
-});*/
-
-app.use(bodyParser.json());
-
-app.use("/images", express.static(path.join(__dirname, "images")));
-
-app.use("/api/sauces", saucesRoutes);
+app.use("/api/sauces/", [authMiddleware], saucesRoutes);
 
 app.use("/api/auth/", userRoutes);
-
-//app.use("/api/auth/signup, userRoutes");
 
 app.listen(3000, () => console.log("App listening on port 3000"));
 

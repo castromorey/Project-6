@@ -2,31 +2,39 @@ const express = require("express");
 const router = express.Router();
 const saucesCtrl = require("../controllers/sauces");
 
-//************************** End of save DB code ****************************
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-//Code to show an array with all of the sauces  in the DB
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "public/uploads"),
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+//const upload = multer({ dest: "/images" });
+
+const upload = multer({
+  storage,
+  dest: path.join(__dirname, "'public/uploads'"),
+  limits: { fileSize: 1000000 },
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname));
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb("error: File could be a valid image");
+  },
+});
 
 router.get("/", saucesCtrl.getAllSauces);
-router.post("/", saucesCtrl.createThing);
-//router.get("/:id", saucesCtrl.getOneThing);
-//router.put("/:id", saucesCtrl.ModifyThing);
-//router.delete("/:id", saucesCtrl.DeleteThing);
-
-//exports.createThing = (req, res) => {
-
-//res.json(data.sauces);
-
-//********* end array sauces
-
-//Code to get un item form the DB
-
-//get a sauce from
-/*router.get("/:id", (req, res, next) => {
-    const sauce = data.sauces.find((s) => s.id === req.params.id);
-  
-    if (!sauce) return res.status(404).json({ error: "Sauce not found" });
-  
-    res.json(sauce);
-  });*/
+//router.post("/", upload.single("image"), saucesCtrl.createSauce);
+router.post("/", upload.single("image"), saucesCtrl.createSauce);
+router.get("/:id", saucesCtrl.getOneSauce);
+router.put("/:id", saucesCtrl.ModifySauce);
+router.delete("/:id", saucesCtrl.DeleteSauce);
 
 module.exports = router;
