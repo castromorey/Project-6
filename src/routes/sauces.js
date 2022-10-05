@@ -7,17 +7,17 @@ const path = require("path");
 const fs = require("fs");
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "public/uploads"),
+  destination: path.join(__dirname, "../../public/uploads"),
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
 
-//const upload = multer({ dest: "/images" });
+// const images = multer({ dest: "/images" });
 
 const upload = multer({
   storage,
-  dest: path.join(__dirname, "'public/uploads'"),
+  dest: path.join(__dirname, "../../public/uploads"),
   limits: { fileSize: 1000000 },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
@@ -31,10 +31,11 @@ const upload = multer({
 });
 
 router.get("/", saucesCtrl.getAllSauces);
-//router.post("/", upload.single("image"), saucesCtrl.createSauce);
 router.post("/", upload.single("image"), saucesCtrl.createSauce);
+//router.post("/", upload, saucesCtrl.createSauce);
 router.get("/:id", saucesCtrl.getOneSauce);
-router.put("/:id", saucesCtrl.ModifySauce);
+router.put("/:id", upload.single("image"), saucesCtrl.ModifySauce);
 router.delete("/:id", saucesCtrl.DeleteSauce);
+router.post("/:id/like", saucesCtrl.likeDislike);
 
 module.exports = router;

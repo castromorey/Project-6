@@ -3,6 +3,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const mongoose = require("mongoose");
+//const db = require("../lib/db");
 
 const saucesRoutes = require("./routes/sauces");
 
@@ -10,15 +11,28 @@ const userRoutes = require("./routes/user");
 
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs");
+
+//const images = multer({ dest: "/images" });
+
+// const storage = multer.diskStorage({
+//   destination: path.join(__dirname, "../public/uploads"),
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+// });
 
 const app = express();
 
-//-------------------------
-app.use(express.static(path.join(__dirname, "uploads")));
+/*app.use(
+  multer({ dest: path.join(__dirname, "public/uploads") }).single("image")
+);*/
 
-//------------
+//app.use(express.static(path.join(__dirname, "public")));
 
 // Connection with mongoDB data base
+
+//mongoose.connect(process.env.Mongo_DB);
 
 mongoose
   .connect(
@@ -35,7 +49,7 @@ mongoose
 app.use(cors());
 app.use(express.json()); //receive the response from server.
 
-//app.use("/uploads/images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "../public/uploads")));
 
 const authMiddleware = (req, res, next) => {
   if (!req.headers.authorization)
