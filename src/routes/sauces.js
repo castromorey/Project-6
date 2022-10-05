@@ -32,7 +32,6 @@ const upload = multer({
 
 router.get("/", saucesCtrl.getAllSauces);
 router.post("/", upload.single("image"), saucesCtrl.createSauce);
-//router.post("/", upload, saucesCtrl.createSauce);
 router.get("/:id", saucesCtrl.getOneSauce);
 router.put("/:id", upload.single("image"), saucesCtrl.ModifySauce);
 router.delete("/:id", saucesCtrl.DeleteSauce);
