@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const saucesRoutes = require("./routes/sauces");
 
 const userRoutes = require("./routes/user");
-
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
