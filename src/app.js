@@ -22,7 +22,6 @@ mongoose
     console.log("Unable to connect to MongoDB Atlas!");
     console.error(error);
   });
-console.log(process.env.MONGO_DB);
 
 app.use(cors());
 app.use(express.json()); //receive the response from server.
