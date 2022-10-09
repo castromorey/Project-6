@@ -1,18 +1,8 @@
-//POST /api/auth/signup
-///SPOST /api/auth/loging
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-//var passwordSchema = require("../models/passwordMod");
-//const validator = require("validator");
 
 exports.signup = (req, res, next) => {
-  //const valideEMail = validator.isEmail(req.body.email);
-
-  //const validePassword = passwordSchema.validate(req.body.password);
-
-  //if (valideEmail === true && validePassword === true) {
   bcrypt.hash(req.body.password, 10).then((hash) => {
     const user = new User({
       email: req.body.email,
@@ -34,7 +24,6 @@ exports.signup = (req, res, next) => {
   });
 };
 
-//r**************************************************
 exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });

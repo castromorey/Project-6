@@ -60,24 +60,10 @@ exports.ModifySauce = async (req, res, next) => {
 
   try {
     const sauce = await Sauce.findOne({ _id: req.params.id });
-    //userId: req.user.userId, (sauce.name = data.name);
-
-    //------------------------
-    /*const voteSauce = {
-      likes: sauce.likes,
-      dislikes: sauce.dislikes,
-      usersliked: sauce.usersLiked,
-      usersdislike: sauce.usersDisliked,
-    };*/
-
-    //-----------------------
 
     for (const key in data) sauce[key] = data[key];
 
-    sauce
-      .save
-      /*{ _id: req.params.id }, { ...data, _id: req.params.id }*/
-      ();
+    sauce.save();
 
     res.status(201).json({
       message: "Sauce updated successfully!",
@@ -126,7 +112,6 @@ exports.likeDislike = async (req, res, next) => {
     const sauce = await Sauce.findOne({ _id: req.params.id });
 
     switch (req.body.like) {
-      // Dislike
       case -1:
         if (sauce.usersLiked.includes(req.user.userId)) {
           sauce.likes = sauce.likes - 1;
