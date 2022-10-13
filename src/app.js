@@ -27,14 +27,16 @@ app.use(express.json()); //receive the response from server.
 
 app.use("/images", express.static(path.join(__dirname, "../public/uploads")));
 
+//Vaidate via token user authentication
+
 const authMiddleware = (req, res, next) => {
   if (!req.headers.authorization)
     return res.json({ message: "No token provided" });
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = req.headers.authorization.split(" ")[1]; //number 1 indicate the second element of the bearer array
 
   try {
-    const decoded = jwt.verify(token, "s3cretttt");
+    const decoded = jwt.verify(token, process.env.Toke_Number);
 
     req.user = { userId: decoded.userId };
 
