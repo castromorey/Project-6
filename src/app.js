@@ -36,7 +36,7 @@ const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1]; //number 1 indicate the second element of the bearer array
 
   try {
-    const decoded = jwt.verify(token, process.env.Toke_Number);
+    const decoded = jwt.verify(token, process.env.Token_Number);
 
     req.user = { userId: decoded.userId };
 
