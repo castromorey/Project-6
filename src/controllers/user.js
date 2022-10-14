@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
     const valid = await bcrypt.compare(req.body.password, user.password);
     if (!valid) throw Error("Incorrect password!");
 
-    const token = jwt.sign({ userId: user._id }, "s3cretttt");
+    const token = jwt.sign({ userId: user._id }, process.env.Toke_Number); //server key
 
     res.status(200).json({ userId: user._id, token });
   } catch (ex) {
